@@ -30,7 +30,7 @@ yarn typeorm migration:revert
 ## Frontend - api:
 
 ### tecnologias utilizadas
-- Framework/Lib: React JS
+- Framework/Lib: React JS, Next.js
 - Linguagem: Typescript
 
 ### instalar as dependencias
