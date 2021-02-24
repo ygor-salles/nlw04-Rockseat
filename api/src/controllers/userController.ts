@@ -10,19 +10,23 @@ class UserController {
         
         //SELECT * FROM USERS WHERE email = 'email'
         const userAlreadyExists = await userRepository.findOne({email})
-        if(userAlreadyExists) {
-            return response.status(400).json({
-                error: 'User already exists!'
-            })
+        
+        try {
+            //possíveis erros
+            if(userAlreadyExists) throw 'User already exists!'
+            
+            //Caso não ocorra nenhum erro ...
+            console.log('Caiu')
+            const user = userRepository.create({
+                name, email
+            }) 
+            await userRepository.save(user)
+            return response.json(user) 
+        } 
+        catch (e) {
+            return response.status(400).json({error: e})
         }
         
-        const user = userRepository.create({
-            name, email
-        }) 
-
-        await userRepository.save(user)
-
-        return response.json(user)
     }
 }
 
