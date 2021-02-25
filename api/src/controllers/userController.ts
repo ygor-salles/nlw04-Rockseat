@@ -1,16 +1,17 @@
 import { Request, Response } from 'express';
-import { getCustomRepository, getRepository } from 'typeorm';
-import { User } from '../models/User';
+import { getCustomRepository } from 'typeorm';
 import { UsersRepository } from '../repositories/UsersRepository';
 
 class UserController {
     async create(request: Request, response: Response){
         const { name, email } = request.body
         
-        const userRepository = getRepository(User);
+        const userRepository = getCustomRepository(UsersRepository);
         
         //SELECT * FROM USERS WHERE email = 'email'
-        const userAlreadyExists = getCustomRepository(UsersRepository)
+        const userAlreadyExists = await userRepository.findOne({
+            email
+        })
         
         try {
             //possíveis erros
@@ -31,4 +32,4 @@ class UserController {
     }
 }
 
-export { UserController }
+export { UserController };
