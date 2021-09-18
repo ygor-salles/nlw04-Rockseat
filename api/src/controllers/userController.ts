@@ -4,9 +4,9 @@ import { UsersRepository } from '../repositories/UsersRepository';
 import * as yup from 'yup'
 
 class UserController {
-    async create(request: Request, response: Response){
+    async create(request: Request, response: Response) {
         const { name, email } = request.body
-        
+
         const schema = yup.object().shape({
             name: yup.string().required('Nome é obrigatório'),
             email: yup.string().email().required('Email incorreto')
@@ -19,29 +19,28 @@ class UserController {
         }
 
         const userRepository = getCustomRepository(UsersRepository);
-        
+
         //SELECT * FROM USERS WHERE email = 'email'
         const userAlreadyExists = await userRepository.findOne({
             email
         })
-        
+
         try {
             //possíveis erros
             // if(!(await schema.isValid(request.body))) throw 'Validation Failed!'
-            if(userAlreadyExists) throw 'User already exists!'
-            
+            if (userAlreadyExists) throw 'User already exists!'
+
             //Caso não ocorra nenhum erro ...
-            console.log('Caiu')
             const user = userRepository.create({
                 name, email
-            }) 
+            })
             await userRepository.save(user)
-            return response.status(201).json(user) 
-        } 
-        catch (e) {
-            return response.status(400).json({error: e})
+            return response.status(201).json(user)
         }
-        
+        catch (e) {
+            return response.status(400).json({ error: e })
+        }
+
     }
 }
 
